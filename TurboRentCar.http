@@ -1,0 +1,6 @@
+@TurboRentCar_HostAddress = http://localhost:5173
+
+GET {{TurboRentCar_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
