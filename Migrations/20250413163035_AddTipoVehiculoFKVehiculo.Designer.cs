@@ -12,8 +12,8 @@ using TechMaster.Context;
 namespace TurboRentCar.Migrations
 {
     [DbContext(typeof(TurboRentContext))]
-    [Migration("20250313003008_changes")]
-    partial class changes
+    [Migration("20250413163035_AddTipoVehiculoFKVehiculo")]
+    partial class AddTipoVehiculoFKVehiculo
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,7 +248,13 @@ namespace TurboRentCar.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ClienteId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("EmpleadoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmpleadosId")
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
@@ -277,13 +283,22 @@ namespace TurboRentCar.Migrations
                     b.Property<int>("VehiculoId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("VehiculoId1")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("ClienteId1");
+
                     b.HasIndex("EmpleadoId");
 
+                    b.HasIndex("EmpleadosId");
+
                     b.HasIndex("VehiculoId");
+
+                    b.HasIndex("VehiculoId1");
 
                     b.ToTable("Inspeccion", (string)null);
 
@@ -421,12 +436,7 @@ namespace TurboRentCar.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<int>("MarcaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("MarcaId");
 
                     b.ToTable("Modelos", (string)null);
 
@@ -435,36 +445,31 @@ namespace TurboRentCar.Migrations
                         {
                             Id = 1,
                             Descripcion = "Sedán",
-                            Estado = "Activo",
-                            MarcaId = 1
+                            Estado = "Activo"
                         },
                         new
                         {
                             Id = 2,
                             Descripcion = "SUV",
-                            Estado = "Activo",
-                            MarcaId = 2
+                            Estado = "Activo"
                         },
                         new
                         {
                             Id = 3,
                             Descripcion = "Coupé",
-                            Estado = "Activo",
-                            MarcaId = 3
+                            Estado = "Activo"
                         },
                         new
                         {
                             Id = 4,
                             Descripcion = "Hatchback",
-                            Estado = "Activo",
-                            MarcaId = 4
+                            Estado = "Activo"
                         },
                         new
                         {
                             Id = 5,
                             Descripcion = "Pickup",
-                            Estado = "Activo",
-                            MarcaId = 5
+                            Estado = "Activo"
                         });
                 });
 
@@ -676,6 +681,49 @@ namespace TurboRentCar.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TurboRentCar.Entities.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuario");
+                });
+
             modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
                 {
                     b.Property<int>("Id")
@@ -769,17 +817,29 @@ namespace TurboRentCar.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TurboRentCar.Entities.Cliente", null)
+                        .WithMany("Inspeccion")
+                        .HasForeignKey("ClienteId1");
+
                     b.HasOne("TurboRentCar.Entities.Empleados", "Empleados")
                         .WithMany()
                         .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TurboRentCar.Entities.Empleados", null)
+                        .WithMany("Inspeccion")
+                        .HasForeignKey("EmpleadosId");
+
                     b.HasOne("TurboRentCar.Entities.Vehiculo", "Vehiculo")
                         .WithMany()
                         .HasForeignKey("VehiculoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("TurboRentCar.Entities.Vehiculo", null)
+                        .WithMany("Inspeccion")
+                        .HasForeignKey("VehiculoId1");
 
                     b.Navigation("Cliente");
 
@@ -788,33 +848,22 @@ namespace TurboRentCar.Migrations
                     b.Navigation("Vehiculo");
                 });
 
-            modelBuilder.Entity("TurboRentCar.Entities.Modelos", b =>
-                {
-                    b.HasOne("TurboRentCar.Entities.Marcas", "Marca")
-                        .WithMany()
-                        .HasForeignKey("MarcaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Marca");
-                });
-
             modelBuilder.Entity("TurboRentCar.Entities.RentaDevolucion", b =>
                 {
                     b.HasOne("TurboRentCar.Entities.Cliente", "Cliente")
-                        .WithMany()
+                        .WithMany("RentaDevolucion")
                         .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TurboRentCar.Entities.Empleados", "Empleado")
-                        .WithMany()
+                        .WithMany("RentaDevolucion")
                         .HasForeignKey("EmpleadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TurboRentCar.Entities.Vehiculo", "Vehiculo")
-                        .WithMany()
+                        .WithMany("RentaDevolucion")
                         .HasForeignKey("VehiculoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -828,37 +877,82 @@ namespace TurboRentCar.Migrations
 
             modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
                 {
-                    b.HasOne("TurboRentCar.Entities.Marcas", "Marca")
-                        .WithMany()
+                    b.HasOne("TurboRentCar.Entities.Marcas", "Marcas")
+                        .WithMany("Vehiculo")
                         .HasForeignKey("MarcaId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Vehiculo_Marcas");
 
-                    b.HasOne("TurboRentCar.Entities.Modelos", "Modelo")
-                        .WithMany()
+                    b.HasOne("TurboRentCar.Entities.Modelos", "Modelos")
+                        .WithMany("Vehiculo")
                         .HasForeignKey("ModeloId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Vehiculo_Modelos");
 
                     b.HasOne("TurboRentCar.Entities.TipoCombustible", "TipoCombustible")
-                        .WithMany()
+                        .WithMany("Vehiculo")
                         .HasForeignKey("TipoCombustibleId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Vehiculo_TipoCombustible");
 
                     b.HasOne("TurboRentCar.Entities.Tipos_Vehiculos", "TipoVehiculo")
-                        .WithMany()
+                        .WithMany("Vehiculo")
                         .HasForeignKey("TipoVehiculoId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Vehiculo_Tipos_Vehiculos");
 
-                    b.Navigation("Marca");
+                    b.Navigation("Marcas");
 
-                    b.Navigation("Modelo");
+                    b.Navigation("Modelos");
 
                     b.Navigation("TipoCombustible");
 
                     b.Navigation("TipoVehiculo");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Cliente", b =>
+                {
+                    b.Navigation("Inspeccion");
+
+                    b.Navigation("RentaDevolucion");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Empleados", b =>
+                {
+                    b.Navigation("Inspeccion");
+
+                    b.Navigation("RentaDevolucion");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Marcas", b =>
+                {
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Modelos", b =>
+                {
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.TipoCombustible", b =>
+                {
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Tipos_Vehiculos", b =>
+                {
+                    b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
+                {
+                    b.Navigation("Inspeccion");
+
+                    b.Navigation("RentaDevolucion");
                 });
 #pragma warning restore 612, 618
         }

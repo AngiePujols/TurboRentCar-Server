@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -25,13 +26,13 @@ namespace TurboRentCar.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Marcas marcaData)
+        public ActionResult Save(MarcasDTO marcaData)
         {
             // Crear nueva marca
             var newMarca = new Marcas
             {
                 Descripcion = marcaData.Descripcion,
-                Estado = marcaData.Estado
+                Estado = marcaData.Estado,
             };
 
             context.Marcas.Add(newMarca);
@@ -42,7 +43,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Marcas marcaData)
+        public ActionResult Update(MarcasDTO marcaData)
         {
             // Buscar la marca a actualizar
             var marcaUpdate = context.Marcas.FirstOrDefault(m => m.Id == marcaData.Id);

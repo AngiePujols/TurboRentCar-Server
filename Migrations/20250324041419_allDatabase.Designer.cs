@@ -12,8 +12,8 @@ using TechMaster.Context;
 namespace TurboRentCar.Migrations
 {
     [DbContext(typeof(TurboRentContext))]
-    [Migration("20250313060350_keys")]
-    partial class keys
+    [Migration("20250324041419_allDatabase")]
+    partial class allDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -681,6 +681,49 @@ namespace TurboRentCar.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TurboRentCar.Entities.Usuario", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaRegistro")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Usuario");
+                });
+
             modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
                 {
                     b.Property<int>("Id")
@@ -835,7 +878,7 @@ namespace TurboRentCar.Migrations
             modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
                 {
                     b.HasOne("TurboRentCar.Entities.Marcas", "Marcas")
-                        .WithMany("Vehiculo")
+                        .WithMany("Vehiculos")
                         .HasForeignKey("MarcaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
@@ -886,7 +929,7 @@ namespace TurboRentCar.Migrations
 
             modelBuilder.Entity("TurboRentCar.Entities.Marcas", b =>
                 {
-                    b.Navigation("Vehiculo");
+                    b.Navigation("Vehiculos");
                 });
 
             modelBuilder.Entity("TurboRentCar.Entities.Modelos", b =>

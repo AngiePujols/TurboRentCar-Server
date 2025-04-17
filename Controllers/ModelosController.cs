@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -25,7 +26,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Modelos modeloData)
+        public ActionResult Save(ModelosDTO modeloData)
         {
           
             // Crear nuevo modelo
@@ -43,7 +44,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Modelos modeloData)
+        public ActionResult Update(ModelosDTO modeloData)
         {
             // Buscar el modelo a actualizar
             var modeloUpdate = context.Modelos.FirstOrDefault(m => m.Id == modeloData.Id);

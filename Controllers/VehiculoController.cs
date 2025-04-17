@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Data.Entity;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -19,13 +21,62 @@ namespace TurboRentCar.Controllers
         [Route("GetVehiculos")]
         public ActionResult Get()
         {
-            var vehiculos = context.Vehiculo.ToList();
+            var vehiculos = context.Vehiculo
+                .Include(v => v.Marca)
+                .Select(v => new VehiculoDTO
+                {
+                    Id = v.Id,
+                    Placa = v.Placa,
+                    Estado = v.Estado,
+                    TipoVehiculoId = v.TipoVehiculoId,
+                    MarcaId = v.MarcaId,
+                    ModeloId = v.ModeloId,
+                    TipoCombustibleId = v.TipoCombustibleId,
+                    Marca = v.Marca.Descripcion,
+                    Modelo = v.Modelos.Descripcion,
+                    TipoCombustible = v.TipoCombustible.Descripcion,
+                    TipoVehiculo = v.TipoVehiculo.Descripcion
+                })
+                .ToList();
+
             return Ok(vehiculos);
+        }
+
+        [HttpGet]
+        [Route("GetVehiculo/{id_Vehiculo}")]
+        public ActionResult GetVehiculos(int id_Vehiculo)
+        {
+            var vehiculo = context.Vehiculo
+                .Include(v => v.Marca)
+                .Include(v => v.Modelos)
+                .Include(v => v.TipoCombustible)
+                .Include(v => v.TipoVehiculo)
+                .Select(v => new VehiculoDTO
+                {
+                    Id = v.Id,
+                    Placa = v.Placa,
+                    Estado = v.Estado,
+                    TipoVehiculoId = v.TipoVehiculoId,
+                    MarcaId = v.MarcaId,
+                    ModeloId = v.ModeloId,
+                    TipoCombustibleId = v.TipoCombustibleId,
+                    Marca = v.Marca.Descripcion,
+                    Modelo = v.Modelos.Descripcion,
+                    TipoCombustible = v.TipoCombustible.Descripcion,
+                    TipoVehiculo = v.TipoVehiculo.Descripcion
+                }) 
+                .FirstOrDefault(v => v.Id == id_Vehiculo);
+            if (vehiculo == null)
+            {
+                return NotFound(new { Message = "Vehículo no encontrado" });
+            }
+
+            return Ok(vehiculo);
         }
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Vehiculo vehiculoData)
+        public ActionResult Save(VehiculoDTO vehiculoData)
         {
             // Verificar si el tipo de vehículo existe
             var tipoVehiculoExists = context.Tipos_Vehiculos.Any(tv => tv.Id == vehiculoData.TipoVehiculoId);
@@ -56,7 +107,7 @@ namespace TurboRentCar.Controllers
             }
 
             // Crear nuevo vehículo
-            var newVehiculo = new Vehiculo
+            var newVehiculo = new Vehiculo()
             {
                 TipoVehiculoId = vehiculoData.TipoVehiculoId,
                 MarcaId = vehiculoData.MarcaId,
@@ -69,12 +120,12 @@ namespace TurboRentCar.Controllers
             context.Vehiculo.Add(newVehiculo);
             context.SaveChanges();
 
-            return Ok(new { Message = "Vehículo guardado" });
+            return Ok(new { Message = "Vehículo guardado"});
         }
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Vehiculo vehiculoData)
+        public ActionResult Update(VehiculoDTO vehiculoData)
         {
             // Buscar el vehículo a actualizar
             var vehiculoUpdate = context.Vehiculo.FirstOrDefault(v => v.Id == vehiculoData.Id);
@@ -131,7 +182,7 @@ namespace TurboRentCar.Controllers
             var vehiculoDelete = context.Vehiculo.Find(id_Vehiculo);
             if (vehiculoDelete == null)
             {
-                return NotFound(new { Message = "Vehículo no encontrado" });
+              throw new Exception("Vehículo no encontrado");
             }
 
             context.Vehiculo.Remove(vehiculoDelete);

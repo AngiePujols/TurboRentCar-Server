@@ -15,17 +15,15 @@ namespace TechMaster.Context
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.ApplyConfiguration(new MarcasConfigurations());
             modelBuilder.ApplyConfiguration(new EmpleadosConfigurations());
             modelBuilder.ApplyConfiguration(new ClienteConfiguration());
             modelBuilder.ApplyConfiguration(new InspeccionConfiguration());
-            modelBuilder.ApplyConfiguration(new MarcasConfigurations());
             modelBuilder.ApplyConfiguration(new ModelosConfiguration());
             modelBuilder.ApplyConfiguration(new RentaDevolucionConfiguration());
             modelBuilder.ApplyConfiguration(new TipoCombustibleConfiguration());
             modelBuilder.ApplyConfiguration(new Tipos_VehiculosConfiguration());
             modelBuilder.ApplyConfiguration(new VehiculoConfiguration());
-         
-
         }
 
         public DbSet<Empleados> Empleados { get; set; }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Data.Entity;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -19,13 +21,79 @@ namespace TurboRentCar.Controllers
         [Route("GetRentasDevoluciones")]
         public ActionResult Get()
         {
-            var rentasDevoluciones = context.RentaDevolucion.ToList();
+            var rentasDevoluciones = context.RentaDevolucion
+                .Include(r => r.Empleado)
+                .Include(r => r.Cliente)
+                .Include(r => r.Vehiculo)
+                .Select(r => new RentaDevolucionDTO
+                {
+                    Id = r.Id,
+                    EmpleadoId = r.EmpleadoId,
+                    ClienteId = r.ClienteId,
+                    VehiculoId = r.VehiculoId,
+                    FechaRenta = r.FechaRenta,
+                    FechaDevolucion = r.FechaDevolucion,
+                    MontoPorDia = r.MontoPorDia,
+                    CantidadDias = r.CantidadDias,
+                    Comentario = r.Comentario,
+                    Estado = r.Estado,
+                    VehiculoMarca = r.Vehiculo.Marca.Descripcion,
+                    VehiculoModelo = r.Vehiculo.Modelos.Descripcion,
+                    VehiculoPlaca = r.Vehiculo.Placa,
+                    VehiculoEstado = r.Vehiculo.Estado,
+                    EmpleadoNombre = r.Empleado.nombre,
+                    EmpleadoComision = r.Empleado.porcentaje_comision,
+                    ClienteNombre = $"{r.Cliente.Nombre} {r.Cliente.Apellido}",
+                    ClienteCedula = r.Cliente.Cedula,
+                    Total = r.MontoPorDia * r.CantidadDias
+                })
+                .ToList();
             return Ok(rentasDevoluciones);
+        }
+
+        [HttpGet]
+        [Route("GetRentaDevolucion/{id_RentaDevolucion}")]
+        public ActionResult GetRentaDevolucion(int id_RentaDevolucion)
+        {
+            var rentaDevolucion = context.RentaDevolucion
+                .Include(r => r.Empleado)
+                .Include(r => r.Cliente)
+                .Include(r => r.Vehiculo)
+                .Select(r => new RentaDevolucionDTO
+                {
+                    Id = r.Id,
+                    EmpleadoId = r.EmpleadoId,
+                    ClienteId = r.ClienteId,
+                    VehiculoId = r.VehiculoId,
+                    FechaRenta = r.FechaRenta,
+                    FechaDevolucion = r.FechaDevolucion,
+                    MontoPorDia = r.MontoPorDia,
+                    CantidadDias = r.CantidadDias,
+                    Comentario = r.Comentario,
+                    Estado = r.Estado,
+                    VehiculoMarca = r.Vehiculo.Marca.Descripcion,
+                    VehiculoModelo = r.Vehiculo.Modelos.Descripcion,
+                    VehiculoPlaca = r.Vehiculo.Placa,
+                    VehiculoEstado = r.Vehiculo.Estado,
+                    EmpleadoNombre = r.Empleado.nombre,
+                    EmpleadoComision = r.Empleado.porcentaje_comision,
+                    ClienteNombre = $"{r.Cliente.Nombre} {r.Cliente.Apellido}",
+                    ClienteCedula = r.Cliente.Cedula,
+                    Total = r.MontoPorDia * r.CantidadDias
+                })
+                .FirstOrDefault(r => r.Id == id_RentaDevolucion);
+
+            if (rentaDevolucion == null)
+            {
+                return NotFound(new { Message = "Renta/Devolución no encontrada" });
+            }
+
+            return Ok(rentaDevolucion);
         }
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(RentaDevolucion rentaDevolucionData)
+        public ActionResult Save(RentaDevolucionDTO rentaDevolucionData)
         {
             // Verificar si el empleado existe
             var empleadoExists = context.Empleados.Any(e => e.Id == rentaDevolucionData.EmpleadoId);
@@ -70,7 +138,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(RentaDevolucion rentaDevolucionData)
+        public ActionResult Update(RentaDevolucionDTO rentaDevolucionData)
         {
             // Buscar la renta/devolución a actualizar
             var rentaDevolucionUpdate = context.RentaDevolucion.FirstOrDefault(r => r.Id == rentaDevolucionData.Id);

@@ -718,7 +718,7 @@ namespace TurboRentCar.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuario", (string)null);
+                    b.ToTable("Usuario");
                 });
 
             modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
@@ -752,6 +752,8 @@ namespace TurboRentCar.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MarcaId");
 
                     b.HasIndex("ModeloId");
 
@@ -872,6 +874,13 @@ namespace TurboRentCar.Migrations
 
             modelBuilder.Entity("TurboRentCar.Entities.Vehiculo", b =>
                 {
+                    b.HasOne("TurboRentCar.Entities.Marcas", "Marcas")
+                        .WithMany("Vehiculo")
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Vehiculo_Marcas");
+
                     b.HasOne("TurboRentCar.Entities.Modelos", "Modelos")
                         .WithMany("Vehiculo")
                         .HasForeignKey("ModeloId")
@@ -890,7 +899,10 @@ namespace TurboRentCar.Migrations
                         .WithMany("Vehiculo")
                         .HasForeignKey("TipoVehiculoId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("FK_Vehiculo_Tipos_Vehiculos");
+
+                    b.Navigation("Marcas");
 
                     b.Navigation("Modelos");
 
@@ -911,6 +923,11 @@ namespace TurboRentCar.Migrations
                     b.Navigation("Inspeccion");
 
                     b.Navigation("RentaDevolucion");
+                });
+
+            modelBuilder.Entity("TurboRentCar.Entities.Marcas", b =>
+                {
+                    b.Navigation("Vehiculo");
                 });
 
             modelBuilder.Entity("TurboRentCar.Entities.Modelos", b =>

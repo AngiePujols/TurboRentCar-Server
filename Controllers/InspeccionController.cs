@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Data.Entity;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -19,13 +21,37 @@ namespace TurboRentCar.Controllers
         [Route("GetInspecciones")]
         public ActionResult Get()
         {
-            var inspecciones = context.Inspeccion.ToList();
+            var inspecciones = context.Inspeccion
+                .Include(i => i.Vehiculo)
+                .Include(i => i.Cliente)
+                .Include(i => i.Vehiculo.Marca)
+                .Select(i => new InspeccionDTO
+                {
+                    Id = i.Id,
+                    VehiculoId = i.VehiculoId,
+                    VehiculoMarca = i.Vehiculo.Marca.Descripcion,
+                    VehiculoModelo = i.Vehiculo.Modelos.Descripcion,
+                    VehiculoPlaca = i.Vehiculo.Placa,
+                    ClienteId = i.ClienteId,
+                    Cliente = $"{i.Cliente.Nombre} {i.Cliente.Apellido}",
+                    TieneRalladuras = i.TieneRalladuras,
+                    CantidadCombustible = i.CantidadCombustible,
+                    TieneGomaRespuesta = i.TieneGomaRespuesta,
+                    TieneGato = i.TieneGato,
+                    TieneRoturasCristal = i.TieneRoturasCristal,
+                    EstadoGomas = i.EstadoGomas,
+                    Fecha = i.Fecha,
+                    EmpleadoId = i.EmpleadoId,
+                    Empleado = i.Empleados.nombre,
+                    Estado = i.Estado
+                })
+                .ToList();
             return Ok(inspecciones);
         }
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Inspeccion inspeccionData)
+        public ActionResult Save(InspeccionDTO inspeccionData)
         {
             // Verificar si el vehículo existe
             var vehiculoExists = context.Vehiculo.Any(v => v.Id == inspeccionData.VehiculoId);

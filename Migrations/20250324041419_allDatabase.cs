@@ -8,120 +8,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TurboRentCar.Migrations
 {
     /// <inheritdoc />
-    public partial class datacolumns : Migration
+    public partial class allDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Modelos_Marcas_MarcaId",
-                table: "Modelos");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Estado",
-                table: "Modelos",
-                type: "nvarchar(15)",
-                maxLength: 15,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Descripcion",
-                table: "Modelos",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "telefono",
-                table: "Empleados",
-                type: "nvarchar(15)",
-                maxLength: 15,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "tanda_labor",
-                table: "Empleados",
-                type: "nvarchar(10)",
-                maxLength: 10,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<decimal>(
-                name: "porcentaje_comision",
-                table: "Empleados",
-                type: "decimal(5,2)",
-                nullable: false,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(18,2)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "nombre",
-                table: "Empleados",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "foto",
-                table: "Empleados",
-                type: "nvarchar(255)",
-                maxLength: 255,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "fecha_nacimiento",
-                table: "Empleados",
-                type: "date",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "datetime2");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "fecha_contratacion",
-                table: "Empleados",
-                type: "date",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "datetime2");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "email",
-                table: "Empleados",
-                type: "nvarchar(100)",
-                maxLength: 100,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "direccion",
-                table: "Empleados",
-                type: "nvarchar(200)",
-                maxLength: 200,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "cedula",
-                table: "Empleados",
-                type: "nvarchar(15)",
-                maxLength: 15,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
-
             migrationBuilder.CreateTable(
                 name: "Cliente",
                 columns: table => new
@@ -142,6 +33,105 @@ namespace TurboRentCar.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Empleados",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    direccion = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    telefono = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    cedula = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    tanda_labor = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    fecha_nacimiento = table.Column<DateTime>(type: "date", nullable: false),
+                    fecha_contratacion = table.Column<DateTime>(type: "date", nullable: false),
+                    porcentaje_comision = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    foto = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Empleados", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Marcas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Marcas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Modelos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Modelos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TipoCombustible",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoCombustible", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tipos_Vehiculos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tipos_Vehiculos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuario",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    rol = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaRegistro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Activo = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuario", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Vehiculo",
                 columns: table => new
                 {
@@ -158,25 +148,29 @@ namespace TurboRentCar.Migrations
                 {
                     table.PrimaryKey("PK_Vehiculo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vehiculo_Marcas_MarcaId",
+                        name: "FK_Vehiculo_Marcas",
                         column: x => x.MarcaId,
                         principalTable: "Marcas",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vehiculo_Modelos_ModeloId",
+                        name: "FK_Vehiculo_Modelos",
                         column: x => x.ModeloId,
                         principalTable: "Modelos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vehiculo_TipoCombustible_TipoCombustibleId",
+                        name: "FK_Vehiculo_TipoCombustible",
                         column: x => x.TipoCombustibleId,
                         principalTable: "TipoCombustible",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Vehiculo_Tipos_Vehiculos_TipoVehiculoId",
                         column: x => x.TipoVehiculoId,
                         principalTable: "Tipos_Vehiculos",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -195,7 +189,10 @@ namespace TurboRentCar.Migrations
                     EstadoGomas = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EmpleadoId = table.Column<int>(type: "int", nullable: false),
-                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Estado = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClienteId1 = table.Column<int>(type: "int", nullable: true),
+                    EmpleadosId = table.Column<int>(type: "int", nullable: true),
+                    VehiculoId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -204,15 +201,33 @@ namespace TurboRentCar.Migrations
                         name: "FK_Inspeccion_Cliente_ClienteId",
                         column: x => x.ClienteId,
                         principalTable: "Cliente",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Inspeccion_Cliente_ClienteId1",
+                        column: x => x.ClienteId1,
+                        principalTable: "Cliente",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Inspeccion_Empleados_EmpleadoId",
                         column: x => x.EmpleadoId,
                         principalTable: "Empleados",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Inspeccion_Empleados_EmpleadosId",
+                        column: x => x.EmpleadosId,
+                        principalTable: "Empleados",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Inspeccion_Vehiculo_VehiculoId",
                         column: x => x.VehiculoId,
+                        principalTable: "Vehiculo",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Inspeccion_Vehiculo_VehiculoId1",
+                        column: x => x.VehiculoId1,
                         principalTable: "Vehiculo",
                         principalColumn: "Id");
                 });
@@ -291,6 +306,18 @@ namespace TurboRentCar.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Modelos",
+                columns: new[] { "Id", "Descripcion", "Estado" },
+                values: new object[,]
+                {
+                    { 1, "Sedán", "Activo" },
+                    { 2, "SUV", "Activo" },
+                    { 3, "Coupé", "Activo" },
+                    { 4, "Hatchback", "Activo" },
+                    { 5, "Pickup", "Activo" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "TipoCombustible",
                 columns: new[] { "Id", "Descripcion", "Estado" },
                 values: new object[,]
@@ -315,18 +342,6 @@ namespace TurboRentCar.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Modelos",
-                columns: new[] { "Id", "Descripcion", "Estado", "MarcaId" },
-                values: new object[,]
-                {
-                    { 1, "Sedán", "Activo", 1 },
-                    { 2, "SUV", "Activo", 2 },
-                    { 3, "Coupé", "Activo", 3 },
-                    { 4, "Hatchback", "Activo", 4 },
-                    { 5, "Pickup", "Activo", 5 }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Vehiculo",
                 columns: new[] { "Id", "Estado", "MarcaId", "ModeloId", "Placa", "TipoCombustibleId", "TipoVehiculoId" },
                 values: new object[,]
@@ -339,13 +354,13 @@ namespace TurboRentCar.Migrations
 
             migrationBuilder.InsertData(
                 table: "Inspeccion",
-                columns: new[] { "Id", "CantidadCombustible", "ClienteId", "EmpleadoId", "Estado", "EstadoGomas", "Fecha", "TieneGato", "TieneGomaRespuesta", "TieneRalladuras", "TieneRoturasCristal", "VehiculoId" },
+                columns: new[] { "Id", "CantidadCombustible", "ClienteId", "ClienteId1", "EmpleadoId", "EmpleadosId", "Estado", "EstadoGomas", "Fecha", "TieneGato", "TieneGomaRespuesta", "TieneRalladuras", "TieneRoturasCristal", "VehiculoId", "VehiculoId1" },
                 values: new object[,]
                 {
-                    { 1, "Lleno", 1, 1, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, false, false, 1 },
-                    { 2, "Medio tanque", 2, 2, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, true, true, 2 },
-                    { 3, "Cuarto tanque", 3, 3, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, false, false, 3 },
-                    { 4, "Lleno", 4, 1, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, true, true, 4 }
+                    { 1, "Lleno", 1, null, 1, null, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, false, false, 1, null },
+                    { 2, "Medio tanque", 2, null, 2, null, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, true, true, 2, null },
+                    { 3, "Cuarto tanque", 3, null, 3, null, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, false, false, 3, null },
+                    { 4, "Lleno", 4, null, 1, null, "Pendiente", "Buen estado", new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified), true, true, true, true, 4, null }
                 });
 
             migrationBuilder.InsertData(
@@ -365,14 +380,29 @@ namespace TurboRentCar.Migrations
                 column: "ClienteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Inspeccion_ClienteId1",
+                table: "Inspeccion",
+                column: "ClienteId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inspeccion_EmpleadoId",
                 table: "Inspeccion",
                 column: "EmpleadoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Inspeccion_EmpleadosId",
+                table: "Inspeccion",
+                column: "EmpleadosId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Inspeccion_VehiculoId",
                 table: "Inspeccion",
                 column: "VehiculoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inspeccion_VehiculoId1",
+                table: "Inspeccion",
+                column: "VehiculoId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RentaDevolucion_ClienteId",
@@ -408,22 +438,11 @@ namespace TurboRentCar.Migrations
                 name: "IX_Vehiculo_TipoVehiculoId",
                 table: "Vehiculo",
                 column: "TipoVehiculoId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Modelos_Marcas_MarcaId",
-                table: "Modelos",
-                column: "MarcaId",
-                principalTable: "Marcas",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Modelos_Marcas_MarcaId",
-                table: "Modelos");
-
             migrationBuilder.DropTable(
                 name: "Inspeccion");
 
@@ -431,238 +450,28 @@ namespace TurboRentCar.Migrations
                 name: "RentaDevolucion");
 
             migrationBuilder.DropTable(
+                name: "Usuario");
+
+            migrationBuilder.DropTable(
                 name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Empleados");
 
             migrationBuilder.DropTable(
                 name: "Vehiculo");
 
-            migrationBuilder.DeleteData(
-                table: "Empleados",
-                keyColumn: "Id",
-                keyValue: 1);
+            migrationBuilder.DropTable(
+                name: "Marcas");
 
-            migrationBuilder.DeleteData(
-                table: "Empleados",
-                keyColumn: "Id",
-                keyValue: 2);
+            migrationBuilder.DropTable(
+                name: "Modelos");
 
-            migrationBuilder.DeleteData(
-                table: "Empleados",
-                keyColumn: "Id",
-                keyValue: 3);
+            migrationBuilder.DropTable(
+                name: "TipoCombustible");
 
-            migrationBuilder.DeleteData(
-                table: "Modelos",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Modelos",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "Modelos",
-                keyColumn: "Id",
-                keyValue: 3);
-
-            migrationBuilder.DeleteData(
-                table: "Modelos",
-                keyColumn: "Id",
-                keyValue: 4);
-
-            migrationBuilder.DeleteData(
-                table: "Modelos",
-                keyColumn: "Id",
-                keyValue: 5);
-
-            migrationBuilder.DeleteData(
-                table: "TipoCombustible",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "TipoCombustible",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "TipoCombustible",
-                keyColumn: "Id",
-                keyValue: 3);
-
-            migrationBuilder.DeleteData(
-                table: "TipoCombustible",
-                keyColumn: "Id",
-                keyValue: 4);
-
-            migrationBuilder.DeleteData(
-                table: "TipoCombustible",
-                keyColumn: "Id",
-                keyValue: 5);
-
-            migrationBuilder.DeleteData(
-                table: "Tipos_Vehiculos",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Tipos_Vehiculos",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "Tipos_Vehiculos",
-                keyColumn: "Id",
-                keyValue: 3);
-
-            migrationBuilder.DeleteData(
-                table: "Tipos_Vehiculos",
-                keyColumn: "Id",
-                keyValue: 4);
-
-            migrationBuilder.DeleteData(
-                table: "Tipos_Vehiculos",
-                keyColumn: "Id",
-                keyValue: 5);
-
-            migrationBuilder.DeleteData(
-                table: "Marcas",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Marcas",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "Marcas",
-                keyColumn: "Id",
-                keyValue: 3);
-
-            migrationBuilder.DeleteData(
-                table: "Marcas",
-                keyColumn: "Id",
-                keyValue: 4);
-
-            migrationBuilder.DeleteData(
-                table: "Marcas",
-                keyColumn: "Id",
-                keyValue: 5);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Estado",
-                table: "Modelos",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(15)",
-                oldMaxLength: 15);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Descripcion",
-                table: "Modelos",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(100)",
-                oldMaxLength: 100);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "telefono",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(15)",
-                oldMaxLength: 15);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "tanda_labor",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(10)",
-                oldMaxLength: 10);
-
-            migrationBuilder.AlterColumn<decimal>(
-                name: "porcentaje_comision",
-                table: "Empleados",
-                type: "decimal(18,2)",
-                nullable: false,
-                oldClrType: typeof(decimal),
-                oldType: "decimal(5,2)");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "nombre",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(100)",
-                oldMaxLength: 100);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "foto",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(255)",
-                oldMaxLength: 255);
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "fecha_nacimiento",
-                table: "Empleados",
-                type: "datetime2",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "date");
-
-            migrationBuilder.AlterColumn<DateTime>(
-                name: "fecha_contratacion",
-                table: "Empleados",
-                type: "datetime2",
-                nullable: false,
-                oldClrType: typeof(DateTime),
-                oldType: "date");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "email",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(100)",
-                oldMaxLength: 100);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "direccion",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(200)",
-                oldMaxLength: 200);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "cedula",
-                table: "Empleados",
-                type: "nvarchar(max)",
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(15)",
-                oldMaxLength: 15);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Modelos_Marcas_MarcaId",
-                table: "Modelos",
-                column: "MarcaId",
-                principalTable: "Marcas",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+            migrationBuilder.DropTable(
+                name: "Tipos_Vehiculos");
         }
     }
 }

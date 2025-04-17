@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -25,7 +26,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Empleados empleadoData)
+        public ActionResult Save(EmpleadosDTO empleadoData)
         {
             // Crear nuevo empleado
             var newEmpleado = new Empleados
@@ -51,7 +52,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Empleados empleadoData)
+        public ActionResult Update(EmpleadosDTO empleadoData)
         {
             // Buscar el empleado a actualizar
             var empleadoUpdate = context.Empleados.FirstOrDefault(e => e.Id == empleadoData.Id);

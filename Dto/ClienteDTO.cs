@@ -1,8 +1,6 @@
-﻿using System.Text.Json.Serialization;
-
-namespace TurboRentCar.Entities
+﻿namespace TurboRentCar.Dto
 {
-    public class Cliente
+    public class ClienteDTO
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
@@ -13,9 +11,5 @@ namespace TurboRentCar.Entities
         public string TipoPersona { get; set; }
         public string Estado { get; set; }
 
-        [JsonIgnore]
-        public virtual ICollection<Inspeccion> Inspeccion { get; set; }
-        [JsonIgnore]
-        public virtual ICollection<RentaDevolucion> RentaDevolucion { get; set; }
     }
 }

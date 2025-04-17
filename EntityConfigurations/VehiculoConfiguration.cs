@@ -16,6 +16,8 @@ namespace TurboRentCar.EntityConfigurations
             builder.Property(v => v.Estado)
                 .IsRequired()
                 .HasMaxLength(15);
+            builder.Property(v => v.MarcaId)
+                .IsRequired();
 
             // Datos de prueba para Vehiculo
             builder.HasData(
@@ -25,7 +27,11 @@ namespace TurboRentCar.EntityConfigurations
                 new Vehiculo { Id = 4, TipoVehiculoId = 4, MarcaId = 4, ModeloId = 4, TipoCombustibleId = 4, Placa = "D456789", Estado = "Disponible" }
             );
 
-          
+            // Relación muchos a uno con Marcas
+            builder.HasOne(v => v.Marca)
+                .WithMany(m => m.Vehiculo)
+                .HasForeignKey(v => v.MarcaId)
+                .HasConstraintName("FK_Vehiculo_Marcas");
 
             // Relación con Modelo
             builder.HasOne(v => v.Modelos)
@@ -38,6 +44,12 @@ namespace TurboRentCar.EntityConfigurations
                 .WithMany(tc => tc.Vehiculo)
                 .HasForeignKey(v => v.TipoCombustibleId)
                 .HasConstraintName("FK_Vehiculo_TipoCombustible");
+
+            //// Relación con Tipos_Vehiculos
+            //builder.HasOne(v => v.TipoVehiculo)
+            //    .WithMany(tv => tv.Vehiculo)
+            //    .HasForeignKey(v => v.TipoVehiculoId)
+            //    .HasConstraintName("FK_Vehiculo_Tipos_Vehiculos");
         }
     }
 }

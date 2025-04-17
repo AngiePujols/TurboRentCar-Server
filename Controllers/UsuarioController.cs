@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TechMaster.Controllers
@@ -27,7 +28,7 @@ namespace TechMaster.Controllers
         // POST: api/Usuario/Save
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Usuario usuario)
+        public ActionResult Save(UsuarioDTO usuario)
         {
             var nuevoUsuario = new Usuario()
             {
@@ -50,7 +51,7 @@ namespace TechMaster.Controllers
         // PUT: api/Usuario/Update
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Usuario usuarioData)
+        public ActionResult Update(UsuarioDTO usuarioData)
         {
             var usuarioUpdate = context.Usuario.Where(u => u.Id == usuarioData.Id).FirstOrDefault();
 

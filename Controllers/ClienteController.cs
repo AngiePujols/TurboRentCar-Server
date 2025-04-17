@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechMaster.Context;
+using TurboRentCar.Dto;
 using TurboRentCar.Entities;
 
 namespace TurboRentCar.Controllers
@@ -25,7 +26,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPost]
         [Route("Save")]
-        public ActionResult Save(Cliente clienteData)
+        public ActionResult Save(ClienteDTO clienteData)
         {
             // Crear nuevo cliente
             var newCliente = new Cliente
@@ -61,7 +62,7 @@ namespace TurboRentCar.Controllers
 
         [HttpPut]
         [Route("Update")]
-        public ActionResult Update(Cliente clienteData)
+        public ActionResult Update(ClienteDTO clienteData)
         {
             // Buscar el cliente a actualizar
             var clienteUpdate = context.Cliente.FirstOrDefault(c => c.Id == clienteData.Id);
@@ -94,12 +95,6 @@ namespace TurboRentCar.Controllers
                 return NotFound(new { Message = "Cliente no encontrado" });
             }
 
-            // Eliminar todas las inspecciones relacionadas
-            var inspeccionesRelacionadas = context.Inspeccion
-                .Where(i => i.ClienteId == id_Cliente)
-                .ToList();
-
-            context.Inspeccion.RemoveRange(inspeccionesRelacionadas); // Elimina las inspecciones
             context.Cliente.Remove(clienteDelete); // Elimina el cliente
             context.SaveChanges();
 
